@@ -4,7 +4,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_01b2a67</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_0vxvh18" name="Kundennummer abfragen">
+    <bpmn:userTask id="user_validation" name="Kundennummer abfragen">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="partnerno" label="Partner-No" type="string" />
@@ -14,30 +14,30 @@
       <bpmn:incoming>SequenceFlow_01b2a67</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02v62la</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_01b2a67" sourceRef="StartEvent_1" targetRef="Task_0vxvh18" />
-    <bpmn:userTask id="Task_1mh7wl3" name="Registrations-option wählen">
+    <bpmn:sequenceFlow id="SequenceFlow_01b2a67" sourceRef="StartEvent_1" targetRef="user_validation" />
+    <bpmn:userTask id="registration_option" name="Registrations-option wählen">
       <bpmn:incoming>SequenceFlow_02v62la</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0qr1fcm</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_02v62la" sourceRef="Task_0vxvh18" targetRef="Task_1mh7wl3" />
+    <bpmn:sequenceFlow id="SequenceFlow_02v62la" sourceRef="user_validation" targetRef="registration_option" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_0kcnzbs">
       <bpmn:incoming>SequenceFlow_0qr1fcm</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12vjytk</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0z3anuw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0qr1fcm" sourceRef="Task_1mh7wl3" targetRef="ExclusiveGateway_0kcnzbs" />
+    <bpmn:sequenceFlow id="SequenceFlow_0qr1fcm" sourceRef="registration_option" targetRef="ExclusiveGateway_0kcnzbs" />
     <bpmn:sequenceFlow id="SequenceFlow_12vjytk" name="Aktivierungsbrief?" sourceRef="ExclusiveGateway_0kcnzbs" targetRef="Task_0s3mlky">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${registrationType == 'activation_letter'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_1qun39k">
       <bpmn:incoming>SequenceFlow_1dqgs8t</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="Task_1obdawg" name="Aktivierungs-code eingeben">
+    <bpmn:userTask id="activation_letter" name="Aktivierungs-code eingeben">
       <bpmn:incoming>SequenceFlow_1wpm34z</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0u0vdu3</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1wpm34z" sourceRef="Task_0s3mlky" targetRef="Task_1obdawg" />
-    <bpmn:sequenceFlow id="SequenceFlow_0u0vdu3" sourceRef="Task_1obdawg" targetRef="Task_117yryb" />
+    <bpmn:sequenceFlow id="SequenceFlow_1wpm34z" sourceRef="Task_0s3mlky" targetRef="activation_letter" />
+    <bpmn:sequenceFlow id="SequenceFlow_0u0vdu3" sourceRef="activation_letter" targetRef="Task_117yryb" />
     <bpmn:serviceTask id="Task_117yryb" name="Berechtigungen anlegen" camunda:delegateExpression="${handlePermissions}">
       <bpmn:incoming>SequenceFlow_0u0vdu3</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_19o01ua</bpmn:incoming>
@@ -48,28 +48,28 @@
       <bpmn:incoming>SequenceFlow_12vjytk</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1wpm34z</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0z3anuw" name="Code?" sourceRef="ExclusiveGateway_0kcnzbs" targetRef="Task_0sqk6oy">
+    <bpmn:sequenceFlow id="SequenceFlow_0z3anuw" name="Code?" sourceRef="ExclusiveGateway_0kcnzbs" targetRef="document_code">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${registrationType != 'activation_letter'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Task_0sqk6oy" name="Code eingeben">
+    <bpmn:userTask id="document_code" name="Code eingeben">
       <bpmn:incoming>SequenceFlow_0z3anuw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_19o01ua</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="SequenceFlow_19o01ua" sourceRef="Task_0sqk6oy" targetRef="Task_117yryb" />
+    <bpmn:sequenceFlow id="SequenceFlow_19o01ua" sourceRef="document_code" targetRef="Task_117yryb" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="onboarding">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_0um3510_di" bpmnElement="Task_0vxvh18">
+      <bpmndi:BPMNShape id="UserTask_0um3510_di" bpmnElement="user_validation">
         <dc:Bounds x="294" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_01b2a67_di" bpmnElement="SequenceFlow_01b2a67">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="294" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_0r6e1qw_di" bpmnElement="Task_1mh7wl3">
+      <bpmndi:BPMNShape id="UserTask_0r6e1qw_di" bpmnElement="registration_option">
         <dc:Bounds x="469" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_02v62la_di" bpmnElement="SequenceFlow_02v62la">
@@ -94,7 +94,7 @@
       <bpmndi:BPMNShape id="EndEvent_1qun39k_di" bpmnElement="EndEvent_1qun39k">
         <dc:Bounds x="1353" y="239" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_1rhnvl7_di" bpmnElement="Task_1obdawg">
+      <bpmndi:BPMNShape id="UserTask_1rhnvl7_di" bpmnElement="activation_letter">
         <dc:Bounds x="983" y="60" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1wpm34z_di" bpmnElement="SequenceFlow_1wpm34z">
@@ -125,7 +125,7 @@
           <dc:Bounds x="689" y="266" width="33" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_1p5q033_di" bpmnElement="Task_0sqk6oy">
+      <bpmndi:BPMNShape id="UserTask_1p5q033_di" bpmnElement="document_code">
         <dc:Bounds x="743" y="217" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_19o01ua_di" bpmnElement="SequenceFlow_19o01ua">
